@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Consecrated Life</title>
+
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	
+	<style>
+	
+		.center {
+			width: 800px;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		
+		.title {
+			font-size: 30px;
+			font-weight: bold;
+			/*font-style: italic;*/
+		}
+				
+		.btn1 {
+			background-color: #CF0A2C;
+			color: #FFF;
+		}
+		.btn2 {
+			background-color: #E76829;
+			color: #FFF;
+		}
+		.btn3 {
+			background-color: #199051;
+			color: #FFF;
+		}
+		.btn4 {
+			background-color: #0082CA;			
+			color: #FFF;
+		}
+		.btn {
+			position: relative;
+		}
+		
+		.film_playing {
+			font-size: 20px;
+			position: absolute;
+			top: -20px;
+			left: 0;
+			display: none;
+			color: black;
+		}
+	
+	</style>
+
+</head>
+
+<body>
+
+	<div class="center">
+		
+		<div id="video_wrapper">
+			<div id="title" class="title">&nbsp;</div>
+			<video id="video" width="800" height="450">
+				<source id="source" src="./community.mp4" type="video/mp4" >
+			</video>
+			<div class="progress">
+				<div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+					<span class="sr-only"></span>
+				</div>
+			</div>
+		</div>
+
+		<!-- our buttons	 -->
+		
+		<button id="film1_button" onclick="playVideo(0)" type="button" class="btn btn-default btn-lg btn1">
+			<span class="glyphicon glyphicon-film"></span> Community
+			<span class="glyphicon glyphicon-triangle-top film_playing" id="film1_playing"></span>
+		</button>
+		
+		<button id="film2_button" onclick="playVideo(1)" type="button" class="btn btn-default btn-lg btn2">
+			<span class="glyphicon glyphicon-film"></span> Living
+			<span class="glyphicon glyphicon-triangle-top film_playing" id="film2_playing"></span>
+		</button>
+		
+		<button id="film3_button" onclick="playVideo(2)" type="button" class="btn btn-default btn-lg btn3">
+			<span class="glyphicon glyphicon-film"></span> Discerning the Call
+			<span class="glyphicon glyphicon-triangle-top film_playing" id="film3_playing"></span>
+		</button>
+		
+		<button id="film4_button" onclick="playVideo(3)" type="button" class="btn btn-default btn-lg btn4">
+			<span class="glyphicon glyphicon-film"></span> Life Beyond
+			<span class="glyphicon glyphicon-triangle-top film_playing" id="film4_playing"></span>
+		</button>
+		
+	</div>
+	
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	
+	<script>
+	
+		function playVideo(video_number) {
+					
+			//remove all previous event listeners for the video element node
+			var el = document.getElementById('video'),
+				elClone = el.cloneNode(true);
+			el.parentNode.replaceChild(elClone, el);
+		
+			//define the array that has information about our videos.
+			//array defines the following:
+			//[0]=path to video, [1]=video title, [2]=color code for visual, 
+			//[3]=next video to play in list
+			var video_array = [
+				['./community.mp4', 'The Importance of Community', '#CF0A2C', 1], //
+				['./living.mp4', 'Living the Call', '#E76829', 2], //
+				['./discerning_the_call.mp4', 'Discerning the Call', '#199051', 3], //
+				['./life_beyond.mp4', 'Life Beyond the Vocation', '#0082CA',  0], //
+			];
+
+			//get all the elements we're going to be using
+			var t = document.getElementById('title');
+			var v = document.getElementById('video');
+			var s = document.getElementById('source');
+			var p = document.getElementById('progress');			
+			var b = document.getElementById('film' + (video_number + 1)  + '_button')
+
+			//make the correct button active
+			var buttons = document.getElementsByClassName('btn');
+			for (var i=0; i<buttons.length; i++) {
+				buttons[i].classList.remove('active');
+			}
+			b.classList.add('active');
+			//console.log (window.getComputedStyle(b).width);
+			
+			//set the indicator
+			var indicators = document.getElementsByClassName('film_playing');
+			for (var i=0; i<indicators.length; i++) {
+				indicators[i].style.display = 'none';
+			}
+			//indicators[video_number].style.display = 'block';
+			indicators[video_number].style.color = video_array[video_number][2];
+			
+			//set the title of the video
+			t.innerHTML = video_array[video_number][1];
+			t.style.color = video_array[video_number][2];
+			
+			//set the progress bar to be the correct color via class name
+			p.className = 'progress-bar ' + 'btn' + (video_number + 1);
+			
+			//set the video to play
+			v.src = video_array[video_number][0];
+			v.load();
+			v.play();
+
+			//for testing
+			//v.playbackRate = 1000;
+			
+			v.addEventListener('timeupdate', function() {
+				//var percent = Math.floor((100 / v.duration) * v.currentTime);
+				//console.log( (v.currentTime / v.duration) * 100 )
+				p.style.width = ( (v.currentTime / v.duration) * 100 ).toFixed(4) + '%';
+			}, false);
+			
+			//do some stuff when the video ends
+			v.addEventListener('ended', function() {
+			
+				//remove the listener for the progress bar
+				v.removeEventListener('timeupdate', function() { 
+					console.log('removed the progress bar listener')
+					}, false);			
+					
+				//console.log('video ' + video_number + ' ended');
+				
+				//play the next video
+				playVideo(video_array[video_number][3]);
+				
+			}, false);
+			
+		} //end function playVideo()
+		
+		//start by playing the first video
+		$(document).ready(function() {
+			playVideo(0);
+		});
+		
+	</script>
+
+</body>
+</html>

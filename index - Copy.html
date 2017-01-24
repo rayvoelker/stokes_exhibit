@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Consecrated Life</title>
+
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	
+	<style>
+	
+		.center {
+			width: 900px;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		
+		.title {
+			font-size: 30px;
+			font-style: italic;
+		}
+		
+		.color1 {
+			color: #CF0A2C;
+		}
+		.color2 {
+			color: #E76829;
+		}
+		.color3 {
+			color: #199051;
+		}
+		.color4 {
+			color: #0082CA;
+		}
+		
+		.btn1 {
+			background-color: #CF0A2C;
+			color: #FFF;
+		}
+		.btn2 {
+			background-color: #E76829;
+			color: #FFF;
+		}
+		.btn3 {
+			background-color: #199051;
+			color: #FFF;
+		}
+		.btn4 {
+			background-color: #0082CA;			
+			color: #FFF;
+		}
+		
+		progress {
+			/* Reset the default appearance */
+			-webkit-appearance: none;
+			padding: 0px;
+		}
+		
+		progress::-webkit-progress-bar {
+			width: 900px;
+			background-color: white !important;
+		} 		
+		progress::-webkit-progress-value {
+			background-color: #CF0A2C !important;
+		}
+	
+	</style>
+
+</head>
+
+<body>
+
+	<div class="center">
+		
+		<div id="video_wrapper">
+			<div id="title" class="title">&nbsp;</div>
+			<video id="video" width="900" height="506" autoplay>
+				<source id="source" src="./community.mp4" type="video/mp4" >
+			</video>
+			<progress id="progress" value="0" max="100"></progress>
+		</div>
+
+		<!-- our buttons	 -->
+		<button id="film1_button" type="button" class="btn1 btn btn-default btn-lg" aria-label="Left Align">
+			<span class="glyphicon glyphicon-film" aria-hidden="true"></span> Community
+		</button>
+		
+		<button id="film2_button" type="button" class="btn2 btn btn-default btn-lg" aria-label="Left Align">
+			<span class="glyphicon glyphicon-film" aria-hidden="true"></span> Living
+		</button>
+		
+		<button id="film3_button" type="button" class="btn3 btn btn-default btn-lg" aria-label="Left Align">
+			<span class="glyphicon glyphicon-film" aria-hidden="true"></span> Discerning the Call
+		</button>
+		
+		<button id="film4_button" type="button" class="btn4 btn btn-default btn-lg" aria-label="Left Align">
+			<span class="glyphicon glyphicon-film" aria-hidden="true"></span> Life Beyond
+		</button>
+		
+	</div>
+	
+	<script>
+		//function playVideo(video_number) {
+
+			var video_array = [
+				['./community.mp4', 'The Importance of Community', 'color1', 1], //
+				['./living.mp4', 'Living the Call', 'color2',2], //
+				['./discerning_the_call.mp4', 'Discerning the Call', 'color3', 3], //
+				['./life_beyond.mp4', 'Life Beyond the Vocation', 'color4', 0], //
+			];
+
+			var t = document.getElementById('title');
+			var v = document.getElementById('video');
+			var s = document.getElementById('source');
+			var p = document.getElementById('progress');
+
+			t.innerHTML = video_array[1][1];	//set the title of the video
+			t.className = 'title ' + video_array[1][2];	//set the color of the text
+			
+			v.addEventListener('timeupdate', function() {
+				//var percent = Math.floor((100 / v.duration) * v.currentTime);
+				//console.log( (v.currentTime / v.duration) * 100 )
+				var percent = ( (v.currentTime / v.duration) * 100 );
+				p.value = percent.toFixed(4);
+			}, false);
+		//}
+	</script>
+	
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>
